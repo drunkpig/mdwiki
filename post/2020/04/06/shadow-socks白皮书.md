@@ -5,9 +5,7 @@
 # Shadowsocks:  一个安全socks5代理
 
  <center>S.D.T</center>
-
 <center>January 4, 2019</center>
-
 ## 1 概述
 
 Shadowsocks (后面简称ss)是一个基于[SOCKS5](https://tools.ietf.org/html/rfc1928)的安全代理。
@@ -47,4 +45,57 @@ ss-server收到ss-client发送过来的加密数据，解密之后解析其中�
 
 
 ### 1.3 UDP
+
+
+
+
+
+## 2 数据流加密
+
+数据流加密算法只提供数据保密性，而数据的完整性和正确性并不能保证。用户尽可能使用AEAD算法。
+
+下面的算法提供了合理的保密性。
+
+| 名称             | Key Size | IV Length |
+| ---------------- | -------- | --------- |
+| aes-128-ctr      | 16       | 16        |
+| aes-192-ctr      | 24       | 16        |
+| aes-256-ctr      | 32       | 16        |
+| aes-128-cfb      | 16       | 16        |
+| aes-192-cfb      | 24       | 16        |
+| aes-256-cfb      | 32       | 16        |
+| camellia-128-cfb | 16       | 16        |
+| camellia-192-cfb | 24       | 16        |
+| camellia-256-cfb | 32       | 16        |
+| chacha20-ietf    | 32       | 12        |
+
+
+
+### 2.1 数据流加解密
+
+stream_encrypt是一个这样的加密函数：它接收一个密钥(secret key)，一个初始向量(init vector)，一条数据(message)， 函数输出一条与数据想通长度的密文(ciphertext)，过程表示如下：
+
+`stream_encrypt(secret_key, IV, message)  => ciphertext`
+
+
+
+stream_decrypt是一个解密函数，它还原原始的数据（original message)，过程如下：
+
+`stream_decrypt(secret_key, IV, ciphertext) => message`
+
+
+
+secret key可以是用户指定，也可以从一个（用户的）密码生成。secret key的生成遵从 OpenSSl里的 EVP_bytesToKey，详情可以参考 https://wiki.openssl.org/index.php/Manual:EVP_BytesToKey(3)
+
+
+
+### 2.2 TCP
+
+
+
+
+
+### 2.3 UDP
+
+
 
