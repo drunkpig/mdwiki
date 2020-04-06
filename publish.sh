@@ -3,7 +3,7 @@
 cd ..
 rm -rf jscrapy.github.io
 
-git clone https://github.com/jscrapy/jscrapy.github.io.git
+git clone https://github.com/drunkpig/drunkpig.github.io.git
 cd jscrapy.github.io
 
 git config user.name "${U_NAME}"
@@ -34,7 +34,7 @@ then
 	sed -i "s/__BUILD_VERSION__/`date '+%Y-%m-%d %H:%M:%S'`/" index.html
 	git add .
 	git commit -m "Update blog"
-	git push -f "https://${GITHUB_TK}@github.com/jscrapy/jscrapy.github.io.git" master
+	git push -f "https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git" master
 else
     echo "分支切换不成功，更新失败"
 	exit 1
