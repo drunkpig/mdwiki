@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 cd ..
-rm -rf jscrapy.github.io
+rm -rf drunkpig.github.io
 
 git clone https://github.com/drunkpig/drunkpig.github.io.git
-cd jscrapy.github.io
+cd drunkpig.github.io
 
 git config user.name "${U_NAME}"
 git config user.email "${U_EMAIL}"
