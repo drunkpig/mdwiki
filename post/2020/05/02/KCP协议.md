@@ -7,9 +7,9 @@ tags: 代理
 
 ## KCP 设计初衷
 
-KCP主要目的是为了降低网络延迟，主要应用场景是游戏。它比TCP浪费10~20%带宽的代价下降低30~40%延迟，最大降低3倍延迟。
+KCP主要目的是在保证低延迟的情况下尽力提高传输量。它比TCP浪费10~20%带宽的代价下降低30~40%延迟，最大降低3倍延迟。
 
-
+用小白的话讲：KCP协议能够在网络比较拥塞（弱网）的情况下取得低延迟和大带宽的效果。一个直观的感受是在科学上网的时候一台很烂的VPS（非CN2，非内核算法优化）的情况下流畅播放1080P。
 
 ## KCP特性
 
@@ -67,6 +67,23 @@ ARQ 模型有2种：UNA（此编号前所有包都收到），和ACK(该编号�
 
 ## 名词
 
-**RTT(Round Trip Time)**：一个连接的往返时间，即数据发送时刻到接收到确认的时刻的差值；
-**RTO(Retransmission Time Out)**：重传超时时间，即从数据发送时刻算起，超过这个时间便执行重传。
-RTT和RTO 的关系是：由于网络波动的不确定性，每个RTT都是动态变化的，所以RTO也应随着RTT动态变化。
+- **RTT(Round Trip Time)**：一个连接的往返时间，即数据发送时刻到接收到确认的时刻的差值；
+- **RTO(Retransmission Time Out)**：重传超时时间，即从数据发送时刻算起，超过这个时间便执行重传。
+  RTT和RTO 的关系是：由于网络波动的不确定性，每个RTT都是动态变化的，所以RTO也应随着RTT动态变化。
+- 传输层的数据叫作段(**segment**)
+- 网络层的数据叫作包(**packet**)
+- 数据链路层的数据叫作帧(**frame**)
+- 物理层的数据叫作流(**stream**)
+
+
+
+
+
+## 参考
+
+- https://www.cnblogs.com/yuanyifei1/p/6846310.html
+- 有协议图 https://zhuanlan.zhihu.com/p/112442341
+- TCP RTO与RTT https://www.orczhou.com/index.php/2011/10/tcpip-protocol-start-rto/
+- 流程分析有流程图 https://www.cnblogs.com/wetest/p/9190786.html
+- 流程分析有图，有字段详解 https://blog.csdn.net/yongkai0214/article/details/85156452
+- 
