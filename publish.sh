@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+TZ=Asia/Shanghai
+export TZ
 
 cd ..
 rm -rf drunkpig.github.io
