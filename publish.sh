@@ -31,7 +31,7 @@ then
 
 	# 更新build 时间
 	#sed -i "/<\/body>/i  build: `date '+%Y-%m-%d %H:%M:%S'`" index.html
-	sed -i "s/__BUILD_VERSION__/`date '+%Y-%m-%d %H:%M:%S'`/" index.html
+	sed -i "s/__BUILD_VERSION__/`date '+%Y-%m-%d %H:%M:%S'`/"  `grep __BUILD_VERSION__ -rl ./`
 	git add .
 	git commit -m "Update blog"
 	git push -f "https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git" master
