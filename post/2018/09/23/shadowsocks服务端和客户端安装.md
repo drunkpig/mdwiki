@@ -1,3 +1,7 @@
+tags: shadowsocks
+
+
+
 [TOC]
 
 ## server配置
