@@ -2,7 +2,9 @@
 ## mdwiki介绍
 一句话概括下mdwiki特点：
 ```bash
-一条命令把一个目录内的markdown文档构建成个人博客展示在github上，结合travis-ci实现全自动发布，客户端零安装，零配置。
+一条命令把一个目录内的markdown文档构建成个人博客展示在github上，结合travis-ci实现全自动发布。
+您无需在本机配置任何东西，无需安装nodejs, python等，您只需要在本机编辑markdown，然后push到您的github仓库就OK了。
+
 ```
 
 
