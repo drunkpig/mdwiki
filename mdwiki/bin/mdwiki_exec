@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import mdwiki.mdwiki as mw
 import sys
 
