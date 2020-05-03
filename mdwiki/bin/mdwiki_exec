@@ -3,6 +3,9 @@ import sys
 
 
 if __name__=="__main__":
+    if len(sys.argv)<3:
+        print("python mdwiki_exec <source_dir>  <dist_html_dir>")
+        exit(-1)
     source_dir = sys.argv[1]
     dist_dir = sys.argv[2]
     mdwiki.main(source_dir, dist_dir)
