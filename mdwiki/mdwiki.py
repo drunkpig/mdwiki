@@ -87,6 +87,10 @@ def __get_config(cfg_file="config.json"):
     if os.path.exists(cfg_file):
         default_cfg = cfg_file
 
+    if not os.path.exists(default_cfg):
+        print(f"没找到config.json, 一般应将该位于你的博客最外层")
+        exit(-1)
+
     with open(default_cfg, "r", encoding='utf-8') as f:
         txt = f.read()
     json_obj = json.loads(txt)
