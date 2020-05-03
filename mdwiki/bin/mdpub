@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 TZ=Asia/Shanghai
 export TZ
+git_user=${U_NAME}
+git_email=${U_EMAIL}
+repo_url=${REPO_URL}
+git_push_url="https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git"
+repo_dir=drunkpig.github.io
+
 
 cd ..
-rm -rf drunkpig.github.io
+rm -rf ${repo_dir}
 
-git clone https://github.com/drunkpig/drunkpig.github.io.git
-cd drunkpig.github.io
+# https://github.com/drunkpig/drunkpig.github.io.git
+git clone ${repo_url}
+cd ${repo_dir}
 
-git config user.name "${U_NAME}"
-git config user.email "${U_EMAIL}"
+git config user.name "${git_user}"
+git config user.email "${git_email}"
 
 git checkout source
 python mdwiki.py  ./post   ../html
@@ -36,7 +43,7 @@ then
 	sed -i "s/__BUILD_VERSION__/`date '+%Y-%m-%d %H:%M:%S'`/"  `grep __BUILD_VERSION__ -rl ./`
 	git add .
 	git commit -m "Update blog"
-	git push -f "https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git" master
+	git push -f "${git_push_url}" master
 else
     echo "分支切换不成功，更新失败"
 	exit 1
