@@ -1,2 +1,2 @@
-include mdwiki/config.json MANIFEST.in  README.MD requirements.txt
+include mdwiki/config.json  MANIFEST.in  README.MD requirements.txt
 graft  mdwiki/templates
