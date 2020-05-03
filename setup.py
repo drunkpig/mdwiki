@@ -26,6 +26,6 @@ setuptools.setup(
     #       'console_scripts': ['mdpub=mdwiki/bin/mdpub'],
     #   },
     install_requires=dependencies,
-
+    include_package_data=True,
     python_requires='>=3.7',
 )
