@@ -1,6 +1,6 @@
 import json,re
 import shutil,math
-import sys, random
+import sys, random,os
 from pathlib import Path
 
 import markdown
@@ -44,7 +44,7 @@ def __all_md_files(md_source_dir, dist_dir):
     md_list += list(Path(md_source_dir).glob('**/*.MD'))
     for md in md_list:
         html_file_name = f"{md.stem}.html"
-        p = str(md.relative_to(source_dir).parent)
+        p = str(md.relative_to(md_source_dir).parent)
         p = re.sub("[\\\\/]", "-", p)
         html_path = Path(f"{dist_dir}/{p}/{html_file_name}")
         Path(html_path.parent).mkdir(parents=True, exist_ok=True)
@@ -77,7 +77,16 @@ def __copy_resource(template_theme_dir, theme_static, dist_dir):
 
 
 def __get_config(cfg_file="config.json"):
-    with open(cfg_file, "r", encoding='utf-8') as f:
+    """
+    如果当前目录有就用，否则用自带的默认
+    :param cfg_file:
+    :return:
+    """
+    default_cfg = f"{Path(__file__).parent}/config.json"
+    if os.path.exists(cfg_file):
+        default_cfg = cfg_file
+
+    with open(default_cfg, "r", encoding='utf-8') as f:
         txt = f.read()
     json_obj = json.loads(txt)
 
@@ -148,3 +157,8 @@ def main(source_dir, dist_dir):
     for tag, article_list in tags_article.items():
         new_article_list = [(f'../{str(x)}', x.stem, str(x)[0:-len(x.name)]) for x in article_list] # url, title, pub_date
         tag_template.stream(post=new_article_list, static_path="../", title=f"分类_{tag}").dump(f"{dist_dir}/tags/tag_{tag}.html", encoding='utf-8')
+
+
+if __name__=="__main__":
+    cur_dir = Path(__file__).parent
+    print(cur_dir)
