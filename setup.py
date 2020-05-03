@@ -21,7 +21,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    scripts=['mdwiki/bin/mdpub'],
+    scripts=['mdwiki/bin/mdwiki_exec','mdwiki/bin/mdpub'],
     # entry_points={
     #       'console_scripts': ['mdpub=mdwiki/bin/mdpub'],
     #   },

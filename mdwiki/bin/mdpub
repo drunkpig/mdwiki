@@ -7,7 +7,7 @@ repo_url=${REPO_URL}
 git_push_url="https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git"
 repo_dir=drunkpig.github.io
 
-
+BLOG_BUILD_EXEC=mdwiki_exec
 cd ..
 rm -rf ${repo_dir}
 
@@ -19,7 +19,7 @@ git config user.name "${git_user}"
 git config user.email "${git_email}"
 
 git checkout source
-python mdwiki.py  ./post   ../html
+${BLOG_BUILD_EXEC}  ./post   ../html
 
 git checkout master
 

@@ -88,9 +88,7 @@ def __tiny_png_b64(app_key):
     pass
 
 
-if __name__ == "__main__":
-    source_dir = sys.argv[1]
-    dist_dir = sys.argv[2]
+def main(source_dir, dist_dir):
     shutil.rmtree(dist_dir, ignore_errors=True)
     template_dir, theme, theme_static, markdown_extentions, page_size, pagger_len = __get_config("config.json")
     template_theme_dir = f'{template_dir}/{theme}'
