@@ -82,7 +82,8 @@ def __get_config(cfg_file="config.json"):
     :param cfg_file:
     :return:
     """
-    default_cfg = f"{Path(__file__).parent}/config.json"
+    bin_dir = str(Path(__file__).parent)
+    default_cfg = f"{bin_dir}/config.json"
     if os.path.exists(cfg_file):
         default_cfg = cfg_file
 
@@ -90,7 +91,7 @@ def __get_config(cfg_file="config.json"):
         txt = f.read()
     json_obj = json.loads(txt)
 
-    return json_obj['template_dir'], json_obj['theme'], json_obj['theme_static'], json_obj['markdown_extensions'], json_obj['page_size'], json_obj['pagger_len']
+    return f"{bin_dir}/{json_obj['template_dir']}", json_obj['theme'], json_obj['theme_static'], json_obj['markdown_extensions'], json_obj['page_size'], json_obj['pagger_len']
 
 
 def __tiny_png_b64(app_key):
