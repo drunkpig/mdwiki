@@ -2,7 +2,8 @@
   "template_dir": "templates",
   "theme": "default",
   "theme_static": ["css", "image", "js"],
-  "markdown_extensions": ["markdown.extensions.extra","markdown.extensions.codehilite","markdown.extensions.toc","markdown.extensions.meta","mdx_mathjax","mdx_eqnmath","mdx_alignmath"],
+  "markdown_extensions": ["markdown.extensions.extra","markdown.extensions.codehilite",
+    "markdown.extensions.toc","markdown.extensions.meta","mdwiki.mdx_mathjax","mdwiki.mdx_eqnmath","mdwiki.mdx_alignmath"],
   "page_size": 10,
   "pagger_len": 5
 }
