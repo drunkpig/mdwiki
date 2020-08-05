@@ -5,3 +5,4 @@ beautifulsoup4==4.6.3
 Jinja2>=2.10.1
 lxml
 #python-markdown-mathjax
+py-gfm

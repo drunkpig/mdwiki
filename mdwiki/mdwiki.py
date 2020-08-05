@@ -6,6 +6,7 @@ from pathlib import Path
 import markdown
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader
+from gfm import AutolinkExtension
 
 
 def __all_html_fiels_info(html_dir, page_size):
@@ -115,6 +116,7 @@ def main(source_dir, dist_dir):
     for md, html_file in md_2_html.items():
         Path(Path(html_file).parent).mkdir(parents=True, exist_ok=True)
         with open(md, 'r', encoding='utf-8') as f:
+            markdown_extentions.append(AutolinkExtension())
             mdobj = markdown.Markdown(extensions=markdown_extentions)
             html = mdobj.convert(f.read())
             tags = mdobj.Meta.get('tags')

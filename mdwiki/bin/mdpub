@@ -6,7 +6,7 @@ git_email=${U_EMAIL}
 repo_url=${REPO_URL}
 git_push_url="https://${GITHUB_TK}@github.com/drunkpig/drunkpig.github.io.git"
 repo_dir=drunkpig.github.io
-
+date
 BLOG_BUILD_EXEC=mdwiki_exec
 cd ..
 rm -rf ${repo_dir}
