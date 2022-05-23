@@ -39,7 +39,7 @@ branches:
     - master
 
 install:
-  - pip install -U mdwiki
+  - pip install -U git+https://github.com/drunkpig/mdwiki.git
   - sudo snap install tree
 
 script:
@@ -50,7 +50,7 @@ script:
 
 #### 步骤2. 授权travis-ci
 
-去https://travis-ci.org/ ， 把你的这个博客仓库授权给他构建。
+去https://travis-ci.com/ ， 把你的这个博客仓库授权给他构建。
 
 
 
@@ -63,7 +63,7 @@ script:
 
 
 - GITHUB_TK  去你的github  https://github.com/settings/tokens  新建一个
-- REPO_URL  你的博客的地址，注意是https://开头的，不支持git://开头
+- REPO_URL  你的博客的github地址，注意是https://开头的，不支持git://开头
 - U_EMAIL  你的github email
 - U_NAME 你的github 的名字, 也可以随便写
 
