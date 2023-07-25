@@ -104,7 +104,7 @@ def __tiny_png_b64(app_key):
 
 
 def main(source_dir, dist_dir):
-    shutil.rmtree(dist_dir, ignore_errors=True)
+    #shutil.rmtree(dist_dir, ignore_errors=True)
     template_dir, theme, theme_static, markdown_extentions, page_size, pagger_len = __get_config("config.json")
     template_theme_dir = f'{template_dir}/{theme}'
     env = Environment(loader=FileSystemLoader(template_theme_dir))
