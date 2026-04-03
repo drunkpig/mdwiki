@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import click
+from mdwiki import __version__
 from mdwiki.mdwiki import main as build_site
 
 
@@ -8,6 +9,7 @@ from mdwiki.mdwiki import main as build_site
     context_settings={"help_option_names": ["-h", "--help"]},
     help="Build a static site from a directory of markdown files.",
 )
+@click.version_option(__version__, prog_name="mdwiki_exec")
 @click.argument(
     "source_dir",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, path_type=Path),

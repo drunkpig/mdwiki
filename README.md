@@ -32,6 +32,13 @@ Build a site from a markdown source tree:
 mdwiki_exec <source_dir> <dist_dir>
 ```
 
+Show the built-in help or version:
+
+```bash
+mdwiki_exec --help
+mdwiki_exec --version
+```
+
 Example:
 
 ```bash
@@ -106,9 +113,11 @@ uv build
 Publish to PyPI:
 
 ```bash
-uv build
-uv publish
+git tag -a v0.3.3 -m "Release v0.3.3"
+git push origin master v0.3.3
 ```
+
+Pushing a new `v*` tag triggers the bundled GitHub Actions release workflow, which builds the package with `uv` and publishes it to PyPI.
 
 ## Notes
 

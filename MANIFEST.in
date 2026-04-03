@@ -1,2 +1,2 @@
-include mdwiki/config.json MANIFEST.in README.MD pyproject.toml
+include mdwiki/config.json MANIFEST.in README.md pyproject.toml
 graft  mdwiki/templates

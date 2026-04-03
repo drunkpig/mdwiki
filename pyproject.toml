@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "mdwiki"
 dynamic = ["version"]
 description = "Zero-config static site builder for markdown blogs"
-readme = "README.MD"
+readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 authors = [
@@ -43,4 +43,5 @@ version = { attr = "mdwiki.__version__" }
 mdwiki = [
   "config.json",
   "templates/**/*",
+  "templates/default/image/.keep",
 ]

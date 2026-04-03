@@ -74,7 +74,10 @@ def __copy_resource(template_theme_dir, theme_static, dist_dir):
     for x in theme_static:
         source_dir = f"{template_theme_dir}/{x}"
         dist = f'{dist_dir}/{x}'
-        shutil.copytree(source_dir, dist)
+        if not os.path.exists(source_dir):
+            Path(dist).mkdir(parents=True, exist_ok=True)
+            continue
+        shutil.copytree(source_dir, dist, dirs_exist_ok=True)
 
 
 def __get_config(cfg_file="config.json"):
