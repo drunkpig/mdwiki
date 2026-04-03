@@ -67,7 +67,8 @@ def __process_image(mdpath, source_dir, dist_dir, html, html_file):
 
 def __copy_cname(source_dir, dist_dir):
     file = f"{source_dir}/CNAME"
-    shutil.copy(file, dist_dir)
+    if os.path.exists(file):
+        shutil.copy(file, dist_dir)
 
 
 def __copy_resource(template_theme_dir, theme_static, dist_dir):
@@ -116,8 +117,9 @@ def main(source_dir, dist_dir):
     for md, html_file in md_2_html.items():
         Path(Path(html_file).parent).mkdir(parents=True, exist_ok=True)
         with open(md, 'r', encoding='utf-8') as f:
-            markdown_extentions.append(AutolinkExtension())
-            mdobj = markdown.Markdown(extensions=markdown_extentions)
+            extensions = list(markdown_extentions)
+            extensions.append(AutolinkExtension())
+            mdobj = markdown.Markdown(extensions=extensions)
             html = mdobj.convert(f.read())
             tags = mdobj.Meta.get('tags')
             table_of_content = mdobj.toc
