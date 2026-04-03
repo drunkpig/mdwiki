@@ -50,6 +50,24 @@ mdwiki_exec ./post ./dist
 - markdown posts under dated folders such as `post/2024/04/03/demo.md`
 - optional local images next to each markdown file
 - optional `CNAME`
+- optional `config.json`
+
+## Optional GoatCounter support
+
+You can enable real pageview counters by adding `goatcounter_script` to your `config.json`:
+
+```json
+{
+  "goatcounter_script": "<script data-goatcounter=\"https://drunkpig.goatcounter.com/count\" async src=\"//gc.zgo.at/count.js\"></script>"
+}
+```
+
+When this field is present:
+
+- article pages render a counter next to the slug
+- index pages fetch and display per-article pageviews
+
+When it is absent, `mdwiki` renders `未知` instead of fake random numbers.
 
 ## GitHub Pages workflow
 

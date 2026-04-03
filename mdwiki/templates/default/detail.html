@@ -5,25 +5,33 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="article_title">{{title}}</h1>
+            <div class="article_meta">
+                <span class="article_slug">Slug: <code>{{ goatcounter_path }}</code></span>
+                <span class="article_views">
+                    阅读:
+                    {% if goatcounter_enabled %}
+                    <span class="goatcounter-stat" data-goatcounter-path="{{ goatcounter_path }}">读取中</span>
+                    {% else %}
+                    <span>未知</span>
+                    {% endif %}
+                </span>
+            </div>
             <div class="tags_container">
                 {% if tags %}
-                <span>标签：</span>
+                <span>鏍囩锛?/span>
                 {% for tag in tags %}
                 <a class="tag" href="{{static_path}}tags/tag_{{tag}}.html">{{tag}}</a>
                 {% endfor %}
                 {% endif %}
             </div>
         </div>
-
-
     </div>
     <div class="row">
         <div class="post_content col-lg-10 col-md-10 col-xs-10 col-md-10">
             {{ post_content }}
-
         </div>
         <div class="mytoc col-lg-2 col-md-2 col-xs-2 col-md-2">
-            <span class="toc_title">目录</span>
+            <span class="toc_title">鐩綍</span>
             {{ toc }}
         </div>
     </div>
@@ -38,5 +46,38 @@
     </div>
 </div>
 
+{% if goatcounter_enabled %}
+<script>
+    (function () {
+        var counters = document.querySelectorAll(".goatcounter-stat[data-goatcounter-path]");
+        var goatScript = document.querySelector("script[data-goatcounter]");
+        var goatEndpoint = goatScript ? goatScript.getAttribute("data-goatcounter") : "";
+        if (!counters.length || !goatEndpoint) {
+            return;
+        }
+        var counterBase = goatEndpoint.replace(/\/count\/?$/, "");
+
+        counters.forEach(function (node) {
+            var path = node.getAttribute("data-goatcounter-path");
+            if (!path) {
+                node.textContent = "未知";
+                return;
+            }
+
+            var endpoint = counterBase + "/counter/" + encodeURIComponent(path) + ".json";
+            fetch(endpoint).then(function (response) {
+                if (!response.ok) {
+                    throw new Error("request failed");
+                }
+                return response.json();
+            }).then(function (data) {
+                node.textContent = data.count || 0;
+            }).catch(function () {
+                node.textContent = "未知";
+            });
+        });
+    })();
+</script>
+{% endif %}
 
 {% endblock %}

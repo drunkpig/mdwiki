@@ -5,5 +5,6 @@
   "markdown_extensions": ["markdown.extensions.extra","markdown.extensions.codehilite",
     "markdown.extensions.toc","markdown.extensions.meta","mdwiki.mdx_mathjax","mdwiki.mdx_eqnmath","mdwiki.mdx_alignmath"],
   "page_size": 10,
-  "pagger_len": 5
+  "pagger_len": 5,
+  "goatcounter_script": ""
 }

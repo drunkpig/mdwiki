@@ -34,6 +34,18 @@ div.tags_container{
     text-align: center;
     /*border-bottom: solid 1px #eeeeee;*/
 }
+div.article_meta{
+    text-align: center;
+    color: #666666;
+    margin: 0.8rem 0 1rem;
+}
+div.article_meta span{
+    display: inline-block;
+    margin: 0 0.7rem;
+}
+div.article_meta code{
+    color: #444444;
+}
 span.toc_title{
     font-weight: 900;
     font-size: 1.4em;
