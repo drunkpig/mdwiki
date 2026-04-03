@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <h1>一个简单粗暴有效的个人<a target="_blank" href="https://github.com/drunkpig/mdwiki">博客</a></h1>
+        <h1>一个简单粗暴有效的个人 <a target="_blank" href="https://github.com/drunkpig/mdwiki">博客</a></h1>
         <table class="list">
             <thead>
             <th>文章标题</th>
@@ -13,7 +13,7 @@
 
             <tr>
                 <th><a href="{{ url }}" target="_blank">{{ title }}</a></th>
-                <th>{{ pub_date|default('置顶',True) }}</th>
+                <th>{{ pub_date|default("置顶", True) }}</th>
                 <th>
                     {% if goatcounter_enabled %}
                     <span class="goatcounter-stat" data-goatcounter-path="/{{ url }}">读取中</span>
@@ -28,9 +28,9 @@
 
         <div class="yahoo pagger">
             {% for i in pagger_idx %}
-            {% if i==cur_page %}
+            {% if i == cur_page %}
             <span class="current">[{{ i }}]</span>
-            {% elif i==0 %}
+            {% elif i == 0 %}
 
             <a href="index.html" target="_self">{{ i }}</a>
             {% else %}

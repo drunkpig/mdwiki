@@ -39,6 +39,12 @@ mdwiki_exec --help
 mdwiki_exec --version
 ```
 
+Run the safe incremental mode with a newline-separated changed file list:
+
+```bash
+mdwiki_exec --changed-files changed.txt ./post ./dist
+```
+
 Example:
 
 ```bash
@@ -51,6 +57,18 @@ mdwiki_exec ./post ./dist
 - optional local images next to each markdown file
 - optional `CNAME`
 - optional `config.json`
+
+## Safe Incremental Build
+
+`mdwiki` now supports a safe incremental mode aimed at static blog workflows:
+
+- if only markdown files under `post/` changed, it rebuilds the affected detail pages
+- if images or other local assets under `post/` changed, it rebuilds posts in the same folder
+- it always refreshes index pages and tag pages so listing pages stay correct
+- if `config.json`, `CNAME`, or files outside the source tree changed, it falls back to a full rebuild
+
+The builder writes a manifest file named `.mdwiki-build.json` into the output directory.
+If the previous output directory is restored in CI, the next run can reuse that manifest and avoid rewriting every article page.
 
 ## Optional GoatCounter support
 
@@ -81,12 +99,12 @@ You can also expose the original markdown source for crawlers and readers:
 
 When this field is present, article pages will:
 
-- add a visible link at the top of the article body
-- add a standard `<link rel=\"alternate\" type=\"text/markdown\">` tag in `<head>`
+- add a standard `<link rel="alternate" type="text/markdown">` tag in `<head>`
+- keep the raw markdown URL available to crawlers without showing a visible banner in the page body
 
 ## Build date in footer
 
-The default footer template now renders `build_version` as a `YYYY-MM-DD` date during site generation.
+The default footer template renders `build_version` as a `YYYYMMDD` date during site generation.
 Because GitHub Pages is built from source on every deploy, this date updates for all generated pages on each successful build.
 
 ## GitHub Pages workflow
@@ -94,9 +112,10 @@ Because GitHub Pages is built from source on every deploy, this date updates for
 The recommended deployment model is:
 
 1. Keep markdown source in your repository.
-2. Build the site in GitHub Actions.
-3. Upload the generated `dist/` directory as a Pages artifact.
-4. Deploy with `actions/deploy-pages`.
+2. Restore the previous `dist/` directory from cache.
+3. Build the site in GitHub Actions.
+4. Upload the generated `dist/` directory as a Pages artifact.
+5. Deploy with `actions/deploy-pages`.
 
 Example workflow:
 
@@ -117,27 +136,45 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - uses: actions/configure-pages@v5
+
+      - uses: actions/cache/restore@v4
+        with:
+          path: dist
+          key: pages-dist-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            pages-dist-${{ github.ref_name }}-
+
+      - name: Detect changed files
+        run: |
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            : > changed.txt
+          else
+            git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" > changed.txt
+          fi
+
       - name: Install mdwiki
         run: pip install mdwiki
-      - name: Build site
-        run: mdwiki_exec ./post ./dist
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Build site
+        run: |
+          if [ -s changed.txt ]; then
+            mdwiki_exec --changed-files changed.txt ./post ./dist
+          else
+            mdwiki_exec ./post ./dist
+          fi
+
+      - uses: actions/cache/save@v4
+        if: github.event_name == 'push'
+        with:
+          path: dist
+          key: pages-dist-${{ github.ref_name }}-${{ github.run_id }}
 ```
 
 ## Develop with uv
@@ -151,8 +188,8 @@ uv build
 Publish to PyPI:
 
 ```bash
-git tag -a v0.3.3 -m "Release v0.3.3"
-git push origin master v0.3.3
+git tag -a v0.3.6 -m "Release v0.3.6"
+git push origin master v0.3.6
 ```
 
 Pushing a new `v*` tag triggers the bundled GitHub Actions release workflow, which builds the package with `uv` and publishes it to PyPI.
