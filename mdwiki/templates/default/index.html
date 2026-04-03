@@ -57,13 +57,16 @@
         counters.forEach(function (node) {
             var path = node.getAttribute("data-goatcounter-path");
             if (!path) {
-                node.textContent = "未知";
+                node.textContent = "0";
                 console.warn("[mdwiki] GoatCounter index path is empty");
                 return;
             }
-            var normalizedPath = path.charAt(0) === "/" ? path : "/" + path;
+            var normalizedPath = path === "/" ? "" : (path.charAt(0) === "/" ? path.slice(1) : path);
             var endpoint = counterBase + "/counter/" + encodeURI(normalizedPath) + ".json";
             fetch(endpoint).then(function (response) {
+                if (response.status === 404) {
+                    return { count: 0 };
+                }
                 if (!response.ok) {
                     throw new Error("request failed: " + response.status + " " + endpoint);
                 }
