@@ -2,18 +2,18 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <h1>涓€涓畝鍗曠矖鏆存湁鏁堢殑涓汉<a target="_blank" href="https://github.com/drunkpig/mdwiki">鍗氬</a></h1>
+        <h1>一个简单粗暴有效的个人<a target="_blank" href="https://github.com/drunkpig/mdwiki">博客</a></h1>
         <table class="list">
             <thead>
-            <th>鏂囩珷鏍囬</th>
-            <th>鍙戣〃鏃ユ湡</th>
-            <th>闃呰娆℃暟</th>
+            <th>文章标题</th>
+            <th>发表日期</th>
+            <th>阅读次数</th>
             </thead>
             {% for url, title, pub_date, read_cnt in post %}
 
             <tr>
                 <th><a href="{{ url }}" target="_blank">{{ title }}</a></th>
-                <th>{{ pub_date|default('缃《',True) }}</th>
+                <th>{{ pub_date|default('置顶',True) }}</th>
                 <th>
                     {% if goatcounter_enabled %}
                     <span class="goatcounter-stat" data-goatcounter-path="/{{ url }}">读取中</span>

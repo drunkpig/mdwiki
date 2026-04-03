@@ -46,16 +46,6 @@ div.article_meta span{
 div.article_meta code{
     color: #444444;
 }
-p.llm_source_hint{
-    margin-bottom: 1rem;
-    padding: 0.6rem 0.8rem;
-    background: #f7f7f7;
-    border-left: 4px solid #4c6ef5;
-}
-p.llm_source_hint a{
-    color: #1f4db8;
-    font-weight: 600;
-}
 span.toc_title{
     font-weight: 900;
     font-size: 1.4em;

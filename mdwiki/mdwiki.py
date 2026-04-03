@@ -17,7 +17,7 @@ UNKNOWN_READ_COUNT = "未知"
 
 def __all_html_fiels_info(html_dir, page_size):
     """
-    鍦╠ist鏍圭洰褰曠殑鐩存帴缃《
+    在 dist 根目录的直接置顶
     :param html_dir:
     :param page_size:
     :return:
@@ -25,7 +25,7 @@ def __all_html_fiels_info(html_dir, page_size):
     info = {}  # 0:[(url, title, pub_date, read_cnt)]
 
     temp_info = []
-    top_fix = []  # 缃《鏂囩珷
+    top_fix = []  # 置顶文章
     html_list = list(Path(html_dir).glob("**/*.html"))
 
     for html in html_list:
@@ -66,7 +66,7 @@ def __process_image(mdpath, source_dir, dist_dir, html, html_file):
     images = soup.find_all("img")
     for img in images:
         src = img.get("src")
-        if src is not None and not src.startswith("http"):  # 璇存槑鏄湰鍦板浘鐗?
+        if src is not None and not src.startswith("http"):  # 说明是本地图片
             s = f"{Path(mdpath).parent}/{src}"
             d = f"{dist_dir}/{Path(html_file).relative_to(dist_dir).parent}/{src}"
             Path(Path(d).parent).mkdir(parents=True, exist_ok=True)
@@ -91,7 +91,7 @@ def __copy_resource(template_theme_dir, theme_static, dist_dir):
 
 def __get_config(cfg_file="config.json"):
     """
-    濡傛灉褰撳墠鐩綍鏈夊氨鐢紝鍚﹀垯鐢ㄨ嚜甯︾殑榛樿
+    如果当前目录有就用，否则用自带的默认
     :param cfg_file:
     :return:
     """
@@ -100,7 +100,7 @@ def __get_config(cfg_file="config.json"):
     override_cfg = Path(cfg_file)
 
     if not default_cfg.exists():
-        print("娌℃壘鍒癱onfig.json, 涓€鑸簲灏嗚浣嶄簬浣犵殑鍗氬鏈€澶栧眰")
+        print("没找到 config.json, 一般应将该文件放在你的博客最外层")
         raise SystemExit(-1)
 
     with open(default_cfg, "r", encoding="utf-8") as f:
@@ -143,7 +143,7 @@ def __detail_context(config, md_file, source_dir, html_file, dist_dir, static_pa
         "title": title,
         "tags": tags,
         "toc": table_of_content,
-        "build_version": datetime.now().strftime("%Y-%m-%d"),
+        "build_version": datetime.now().strftime("%Y%m%d"),
         "goatcounter_script": config["goatcounter_script"],
         "goatcounter_enabled": __goatcounter_enabled(config),
         "goatcounter_path": page_path,
@@ -157,7 +157,7 @@ def __shared_page_context(config, static_path, title=None):
         "static_path": static_path,
         "goatcounter_script": config["goatcounter_script"],
         "goatcounter_enabled": __goatcounter_enabled(config),
-        "build_version": datetime.now().strftime("%Y-%m-%d"),
+        "build_version": datetime.now().strftime("%Y%m%d"),
     }
     if title is not None:
         context["title"] = title
@@ -175,7 +175,7 @@ def main(source_dir, dist_dir):
 
     template_theme_dir = f"{template_dir}/{theme}"
     env = Environment(loader=FileSystemLoader(template_theme_dir))
-    env.globals["build_version"] = datetime.now().strftime("%Y-%m-%d")
+    env.globals["build_version"] = datetime.now().strftime("%Y%m%d")
     detail_template = env.get_template("detail.html")
     index_template = env.get_template("index.html")
 
@@ -250,7 +250,7 @@ def main(source_dir, dist_dir):
         new_article_list = [(f"../{x}", Path(x).stem, x[0 : -len(Path(x).name)]) for x in article_list]
         tag_template.stream(
             post=new_article_list,
-            **__shared_page_context(config, "../", title=f"鍒嗙被_{tag}"),
+            **__shared_page_context(config, "../", title=f"分类_{tag}"),
         ).dump(f"{dist_dir}/tags/tag_{tag}.html", encoding="utf-8")
 
 
