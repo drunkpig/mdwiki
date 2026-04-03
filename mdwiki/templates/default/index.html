@@ -56,7 +56,8 @@
 
         counters.forEach(function (node) {
             var path = node.getAttribute("data-goatcounter-path");
-            var endpoint = counterBase + "/counter/" + encodeURIComponent(path) + ".json";
+            var normalizedPath = path.charAt(0) === "/" ? path : "/" + path;
+            var endpoint = counterBase + "/counter/" + encodeURI(normalizedPath) + ".json";
             fetch(endpoint).then(function (response) {
                 if (!response.ok) {
                     throw new Error("request failed");
