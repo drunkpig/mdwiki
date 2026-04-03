@@ -16,6 +16,7 @@ dependencies = [
   "markdown>=3.7,<4",
   "Pygments==2.7.4",
   "beautifulsoup4==4.6.3",
+  "click>=8.1,<9",
   "Jinja2>=2.10.1",
   "lxml",
 ]

@@ -1,19 +1,25 @@
-import argparse
+from pathlib import Path
 
+import click
 from mdwiki.mdwiki import main as build_site
 
 
-def mdwiki_exec() -> int:
-    parser = argparse.ArgumentParser(
-        prog="mdwiki_exec",
-        description="Build a static site from a directory of markdown files.",
-    )
-    parser.add_argument("source_dir", help="Directory containing markdown source files")
-    parser.add_argument("dist_dir", help="Directory to write generated HTML files into")
-    args = parser.parse_args()
-    build_site(args.source_dir, args.dist_dir)
-    return 0
+@click.command(
+    context_settings={"help_option_names": ["-h", "--help"]},
+    help="Build a static site from a directory of markdown files.",
+)
+@click.argument(
+    "source_dir",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, path_type=Path),
+)
+@click.argument(
+    "dist_dir",
+    type=click.Path(file_okay=False, dir_okay=True, path_type=Path),
+)
+def mdwiki_exec(source_dir: Path, dist_dir: Path) -> None:
+    """Build the markdown tree in SOURCE_DIR into DIST_DIR."""
+    build_site(str(source_dir), str(dist_dir))
 
 
-def main() -> int:
-    return mdwiki_exec()
+def main() -> None:
+    mdwiki_exec()
