@@ -1,93 +1,117 @@
+# mdwiki
 
-## mdwiki介绍
-一句话概括下mdwiki特点：
+`mdwiki` is a small static site builder that turns a directory tree of markdown files into a blog-ready HTML site.
+
+It keeps the authoring model simple:
+
+- directories become URL segments
+- each markdown file becomes one HTML page
+- local images referenced from markdown are copied into the output site
+- index pages and tag pages are generated automatically
+
+## Install
+
+Use `uv`:
+
 ```bash
-一条命令把一个目录内的markdown文档构建成个人博客展示在github上，结合travis-ci实现全自动发布。
-您无需在本机配置任何东西，无需安装nodejs, python等，您只需要在本机编辑markdown，然后push到您的github仓库就OK了。
-
+uv tool install mdwiki
 ```
 
+Or install from source:
 
+```bash
+uv sync
+uv run mdwiki_exec ./example-posts ./dist
+```
 
-## 使用手册
+## CLI
 
-#### 步骤1. 创建博客github仓库
+Build a site from a markdown source tree:
 
-创建一个空的仓库，切换到分支`source`, 目的是让`master`分支放编译好的博客。
+```bash
+mdwiki_exec <source_dir> <dist_dir>
+```
 
-仓库里建个目录post, post里以日期为目录，目录里写md博客，推荐typora。
+Example:
 
-日期以年/月/日  来建，当然也可以  年-月/日/， 或者年-月-日/
+```bash
+mdwiki_exec ./post ./dist
+```
 
-参考我的  https://github.com/drunkpig/drunkpig.github.io/tree/source
+`source_dir` usually contains:
 
-然后在工程目录下建立一个.travis.yml文件，内容如下，直接copy:
+- markdown posts under dated folders such as `post/2024/04/03/demo.md`
+- optional local images next to each markdown file
+- optional `CNAME`
 
+## GitHub Pages workflow
 
+The recommended deployment model is:
+
+1. Keep markdown source in your repository.
+2. Build the site in GitHub Actions.
+3. Upload the generated `dist/` directory as a Pages artifact.
+4. Deploy with `actions/deploy-pages`.
+
+Example workflow:
 
 ```yaml
-language: python
-dist: bionic
-sudo: required
+name: Build and Deploy Pages
 
-python:
-    - "3.7"
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
 
-branches:
-  only:
-    - source
-    - master
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-install:
-  - pip install -U git+https://github.com/drunkpig/mdwiki.git
-  - sudo snap install tree
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/configure-pages@v5
+      - name: Install mdwiki
+        run: pip install mdwiki
+      - name: Build site
+        run: mdwiki_exec ./post ./dist
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
-script:
-  - mdpub
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
+## Develop with uv
 
+```bash
+uv sync
+uv run mdwiki_exec ./post ./dist
+uv build
+```
 
-#### 步骤2. 授权travis-ci
+Publish to PyPI:
 
-去https://travis-ci.com/ ， 把你的这个博客仓库授权给他构建。
+```bash
+uv build
+uv publish
+```
 
+## Notes
 
-
-#### 步骤3. 在travis-ci上配置几个变量
-
-进入你授权的仓库的setting里，配置几个环境变量
-
-![](docs\配置参数.png)
-
-
-
-- GITHUB_TK  去你的github  https://github.com/settings/tokens  新建一个
-- REPO_URL  你的博客的github地址，注意是https://开头的，不支持git://开头
-- U_EMAIL  你的github email
-- U_NAME 你的github 的名字, 也可以随便写
-
-
-
-#### 写博客提交
-
-最后你就可以在你本地使用可视化的markdown 编辑器写博客了。写好之后push到仓库里。travis-ci自动会对博客进行构建，并提交到你的仓库。
-
-还可以给自己的博客绑定个域名，自己去网上查吧，很多介绍。
-
-
-
-
-
-## 参考资源
-
-- css https://github.com/wecatch/markdown-css
-- 分页 http://www.htmleaf.com/Demo/201707054612.html
-- 还有一种提交到git的方法 https://garryshield.github.io/2019/04/08/travis-ci/
-- https://www.yukunweb.com/2018/2/static-blog-based-on-flask/  参考学习
-- 数学公式解析 https://github.com/sJohnsonStoever/python-markdown-mathjax
-- bootcss 文档 https://code.z01.com/v4/layout/grid.html
-- https://juejin.im/post/5c0a27ee6fb9a049d05d8b70   mathjax
-- https://www.caam.rice.edu/~heinken/latex/symbols.pdf mathjax
-- [https://oysz2016.github.io/post/8611e6fb.html#%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6](https://oysz2016.github.io/post/8611e6fb.html#关系运算符)  mathjax
-- 
+- `CNAME` is optional.
+- The bundled default theme is stored under `mdwiki/templates/default`.
+- `mdwiki_exec` is the supported public CLI entrypoint.
