@@ -69,6 +69,26 @@ When this field is present:
 
 When it is absent, `mdwiki` renders `未知` instead of fake random numbers.
 
+## Optional source markdown link
+
+You can also expose the original markdown source for crawlers and readers:
+
+```json
+{
+  "source_markdown_base_url": "https://raw.githubusercontent.com/drunkpig/drunkpig.github.io/master/post"
+}
+```
+
+When this field is present, article pages will:
+
+- add a visible link at the top of the article body
+- add a standard `<link rel=\"alternate\" type=\"text/markdown\">` tag in `<head>`
+
+## Build date in footer
+
+The default footer template now renders `build_version` as a `YYYY-MM-DD` date during site generation.
+Because GitHub Pages is built from source on every deploy, this date updates for all generated pages on each successful build.
+
 ## GitHub Pages workflow
 
 The recommended deployment model is:

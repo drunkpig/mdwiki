@@ -28,6 +28,11 @@
     </div>
     <div class="row">
         <div class="post_content col-lg-10 col-md-10 col-xs-10 col-md-10">
+            {% if source_markdown_enabled %}
+            <p class="llm_source_hint">
+                <a href="{{ source_markdown_url }}" target="_blank" rel="noopener noreferrer">大模型爬虫请看这里</a>
+            </p>
+            {% endif %}
             {{ post_content }}
         </div>
         <div class="mytoc col-lg-2 col-md-2 col-xs-2 col-md-2">

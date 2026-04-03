@@ -3,7 +3,9 @@ import math
 import os
 import re
 import shutil
+from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 import markdown
 from bs4 import BeautifulSoup
@@ -116,6 +118,7 @@ def __get_config(cfg_file="config.json"):
         "page_size": json_obj["page_size"],
         "pagger_len": json_obj["pagger_len"],
         "goatcounter_script": json_obj.get("goatcounter_script", "").strip(),
+        "source_markdown_base_url": json_obj.get("source_markdown_base_url", "").rstrip("/"),
     }
 
 
@@ -123,17 +126,29 @@ def __goatcounter_enabled(config):
     return bool(config.get("goatcounter_script"))
 
 
-def __detail_context(config, html_file, dist_dir, static_path, title, tags, table_of_content, html):
+def __source_markdown_url(config, md_file, source_dir):
+    base_url = config.get("source_markdown_base_url", "")
+    if not base_url:
+        return ""
+    relative_md_path = Path(md_file).relative_to(source_dir).as_posix()
+    return f"{base_url}/{quote(relative_md_path, safe='/')}"
+
+
+def __detail_context(config, md_file, source_dir, html_file, dist_dir, static_path, title, tags, table_of_content, html):
     page_path = "/" + Path(html_file).relative_to(dist_dir).as_posix()
+    source_markdown_url = __source_markdown_url(config, md_file, source_dir)
     return {
         "post_content": html,
         "static_path": static_path,
         "title": title,
         "tags": tags,
         "toc": table_of_content,
+        "build_version": datetime.now().strftime("%Y-%m-%d"),
         "goatcounter_script": config["goatcounter_script"],
         "goatcounter_enabled": __goatcounter_enabled(config),
         "goatcounter_path": page_path,
+        "source_markdown_url": source_markdown_url,
+        "source_markdown_enabled": bool(source_markdown_url),
     }
 
 
@@ -142,6 +157,7 @@ def __shared_page_context(config, static_path, title=None):
         "static_path": static_path,
         "goatcounter_script": config["goatcounter_script"],
         "goatcounter_enabled": __goatcounter_enabled(config),
+        "build_version": datetime.now().strftime("%Y-%m-%d"),
     }
     if title is not None:
         context["title"] = title
@@ -159,6 +175,7 @@ def main(source_dir, dist_dir):
 
     template_theme_dir = f"{template_dir}/{theme}"
     env = Environment(loader=FileSystemLoader(template_theme_dir))
+    env.globals["build_version"] = datetime.now().strftime("%Y-%m-%d")
     detail_template = env.get_template("detail.html")
     index_template = env.get_template("index.html")
 
@@ -185,6 +202,8 @@ def main(source_dir, dist_dir):
         detail_template.stream(
             **__detail_context(
                 config,
+                md,
+                source_dir,
                 html_file,
                 dist_dir,
                 static_path,
