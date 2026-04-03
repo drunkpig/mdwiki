@@ -56,11 +56,17 @@
             return;
         }
         var counterBase = goatEndpoint.replace(/\/count\/?$/, "");
+        var goatPath = "";
+        if (window.goatcounter && typeof window.goatcounter.get_data === "function") {
+            var goatData = window.goatcounter.get_data();
+            goatPath = goatData && goatData.p ? goatData.p : "";
+        }
 
         counters.forEach(function (node) {
-            var path = node.getAttribute("data-goatcounter-path");
+            var path = goatPath || node.getAttribute("data-goatcounter-path");
             if (!path) {
                 node.textContent = "未知";
+                console.warn("[mdwiki] GoatCounter detail path is empty");
                 return;
             }
 
@@ -68,12 +74,13 @@
             var endpoint = counterBase + "/counter/" + encodeURI(normalizedPath) + ".json";
             fetch(endpoint).then(function (response) {
                 if (!response.ok) {
-                    throw new Error("request failed");
+                    throw new Error("request failed: " + response.status + " " + endpoint);
                 }
                 return response.json();
             }).then(function (data) {
                 node.textContent = data.count || 0;
-            }).catch(function () {
+            }).catch(function (error) {
+                console.warn("[mdwiki] GoatCounter detail counter failed", error);
                 node.textContent = "未知";
             });
         });

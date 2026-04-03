@@ -56,16 +56,22 @@
 
         counters.forEach(function (node) {
             var path = node.getAttribute("data-goatcounter-path");
+            if (!path) {
+                node.textContent = "未知";
+                console.warn("[mdwiki] GoatCounter index path is empty");
+                return;
+            }
             var normalizedPath = path.charAt(0) === "/" ? path : "/" + path;
             var endpoint = counterBase + "/counter/" + encodeURI(normalizedPath) + ".json";
             fetch(endpoint).then(function (response) {
                 if (!response.ok) {
-                    throw new Error("request failed");
+                    throw new Error("request failed: " + response.status + " " + endpoint);
                 }
                 return response.json();
             }).then(function (data) {
                 node.textContent = data.count || 0;
-            }).catch(function () {
+            }).catch(function (error) {
+                console.warn("[mdwiki] GoatCounter index counter failed", error);
                 node.textContent = "未知";
             });
         });
