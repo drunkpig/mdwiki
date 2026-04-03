@@ -188,8 +188,8 @@ uv build
 Publish to PyPI:
 
 ```bash
-git tag -a v0.3.6 -m "Release v0.3.6"
-git push origin master v0.3.6
+git tag -a v0.3.7 -m "Release v0.3.7"
+git push origin master v0.3.7
 ```
 
 Pushing a new `v*` tag triggers the bundled GitHub Actions release workflow, which builds the package with `uv` and publishes it to PyPI.
