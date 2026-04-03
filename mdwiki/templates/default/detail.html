@@ -56,14 +56,9 @@
             return;
         }
         var counterBase = goatEndpoint.replace(/\/count\/?$/, "");
-        var goatPath = "";
-        if (window.goatcounter && typeof window.goatcounter.get_data === "function") {
-            var goatData = window.goatcounter.get_data();
-            goatPath = goatData && goatData.p ? goatData.p : "";
-        }
 
         function loadCount(node, retriesLeft) {
-            var path = goatPath || node.getAttribute("data-goatcounter-path");
+            var path = window.location.pathname + window.location.search;
             if (!path) {
                 node.textContent = "0";
                 console.warn("[mdwiki] GoatCounter detail path is empty");

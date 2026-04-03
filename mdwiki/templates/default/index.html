@@ -55,7 +55,14 @@
         var counterBase = goatEndpoint.replace(/\/count\/?$/, "");
 
         counters.forEach(function (node) {
-            var path = node.getAttribute("data-goatcounter-path");
+            var link = node.closest("tr") ? node.closest("tr").querySelector("a[href]") : null;
+            var path = "";
+            if (link) {
+                var parsed = new URL(link.getAttribute("href"), window.location.href);
+                path = parsed.pathname + parsed.search;
+            } else {
+                path = node.getAttribute("data-goatcounter-path");
+            }
             if (!path) {
                 node.textContent = "0";
                 console.warn("[mdwiki] GoatCounter index path is empty");
