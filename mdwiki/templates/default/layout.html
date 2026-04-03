@@ -34,13 +34,13 @@
     <link rel="alternate" type="text/markdown" href="{{ source_markdown_url }}" title="Source Markdown">
     {% endif %}
 
+    {% if goatcounter_script %}
+    {{ goatcounter_script|safe }}
+    {% endif %}
+
 </head>
 <body>
 {% block body %}{% endblock %}
-
-{% if goatcounter_script %}
-{{ goatcounter_script|safe }}
-{% endif %}
 
 {% block footer %}
 {% include 'footer.html' %}
