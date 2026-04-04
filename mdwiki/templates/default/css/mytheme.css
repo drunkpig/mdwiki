@@ -18,12 +18,29 @@ div.pagger{
 div.post_content div.toc{
     display: none;
 }
+div.article_layout{
+    align-items: flex-start;
+}
+div.article_layout > div.post_content{
+    min-width: 0;
+}
 div.mytoc{
     position: -webkit-sticky;
     position: sticky;
     top: 4rem;
     max-height: fit-content;
     overflow-y: visible;
+}
+@media (min-width: 992px) {
+    div.article_layout > div.post_content{
+        flex: 1 1 auto;
+        max-width: calc(100% - 240px);
+    }
+    div.article_layout > div.mytoc{
+        flex: 0 0 240px;
+        max-width: 240px;
+        min-width: 220px;
+    }
 }
 h1.article_title{
     text-align: center;
