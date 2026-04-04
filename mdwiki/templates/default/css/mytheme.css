@@ -24,14 +24,44 @@ div.article_layout{
 div.article_layout > div.post_content{
     min-width: 0;
 }
+button.toc_fab{
+    position: fixed;
+    right: 1rem;
+    top: 7rem;
+    z-index: 1040;
+    border: none;
+    border-radius: 999px;
+    background: #222222;
+    color: #ffffff;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+button.toc_fab:focus{
+    outline: none;
+}
+div.toc_backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.22);
+    z-index: 1030;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+div.toc_backdrop.toc_backdrop_open{
+    opacity: 1;
+}
 div.mytoc{
     position: -webkit-sticky;
     position: sticky;
     top: 4rem;
     max-height: fit-content;
     overflow-y: visible;
+    z-index: 1020;
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
     div.article_layout > div.post_content{
         flex: 1 1 auto;
         max-width: calc(100% - 240px);
@@ -40,6 +70,34 @@ div.mytoc{
         flex: 0 0 240px;
         max-width: 240px;
         min-width: 220px;
+    }
+}
+@media (max-width: 1199.98px) {
+    button.toc_fab{
+        display: inline-block;
+    }
+    div.article_layout > div.post_content{
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    div.article_layout > div.mytoc{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(360px, 86vw);
+        max-width: none;
+        min-width: 0;
+        height: 100vh;
+        margin: 0;
+        padding: 5rem 1rem 1.25rem;
+        background: #ffffff;
+        box-shadow: -18px 0 40px rgba(0, 0, 0, 0.14);
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.22s ease;
+    }
+    div.article_layout > div.mytoc.toc_open{
+        transform: translateX(0);
     }
 }
 h1.article_title{

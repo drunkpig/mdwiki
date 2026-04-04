@@ -2,6 +2,10 @@
 {% block body %}
 
 <div class="container">
+    <button type="button" class="toc_fab" aria-controls="article-toc" aria-expanded="false">
+        目录
+    </button>
+    <div class="toc_backdrop" hidden></div>
     <div class="row">
         <div class="col-lg-12">
             <h1 class="article_title">{{ title }}</h1>
@@ -30,7 +34,7 @@
         <div class="post_content col-lg-10 col-md-10 col-xs-10 col-md-10">
             {{ post_content }}
         </div>
-        <div class="mytoc col-lg-2 col-md-2 col-xs-2 col-md-2">
+        <div id="article-toc" class="mytoc col-lg-2 col-md-2 col-xs-2 col-md-2" aria-hidden="false">
             <span class="toc_title">目录</span>
             {{ toc }}
         </div>
@@ -45,6 +49,64 @@
         </script>
     </div>
 </div>
+
+<script>
+    (function () {
+        var toc = document.getElementById("article-toc");
+        var fab = document.querySelector(".toc_fab");
+        var backdrop = document.querySelector(".toc_backdrop");
+        if (!toc || !fab || !backdrop) {
+            return;
+        }
+
+        function isDrawerMode() {
+            return window.matchMedia("(max-width: 1199.98px)").matches;
+        }
+
+        function openDrawer() {
+            if (!isDrawerMode()) {
+                return;
+            }
+            toc.classList.add("toc_open");
+            backdrop.hidden = false;
+            backdrop.classList.add("toc_backdrop_open");
+            fab.setAttribute("aria-expanded", "true");
+            toc.setAttribute("aria-hidden", "false");
+        }
+
+        function closeDrawer() {
+            toc.classList.remove("toc_open");
+            backdrop.classList.remove("toc_backdrop_open");
+            backdrop.hidden = true;
+            fab.setAttribute("aria-expanded", "false");
+            toc.setAttribute("aria-hidden", isDrawerMode() ? "true" : "false");
+        }
+
+        fab.addEventListener("click", function () {
+            if (toc.classList.contains("toc_open")) {
+                closeDrawer();
+            } else {
+                openDrawer();
+            }
+        });
+
+        backdrop.addEventListener("click", closeDrawer);
+
+        window.addEventListener("resize", function () {
+            if (!isDrawerMode()) {
+                backdrop.hidden = true;
+                backdrop.classList.remove("toc_backdrop_open");
+                toc.classList.remove("toc_open");
+                fab.setAttribute("aria-expanded", "false");
+                toc.setAttribute("aria-hidden", "false");
+            } else if (!toc.classList.contains("toc_open")) {
+                toc.setAttribute("aria-hidden", "true");
+            }
+        });
+
+        closeDrawer();
+    })();
+</script>
 
 {% if goatcounter_enabled %}
 <script>
